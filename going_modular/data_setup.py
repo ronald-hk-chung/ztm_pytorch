@@ -1,5 +1,5 @@
 """
-Contains functionality for creating PyTorch DataLoaders for 
+Contains functionality for creating PyTorch DataLoaders for
 image classification data.
 """
 
@@ -9,10 +9,11 @@ from torchvision import datasets, transforms
 
 NUM_WORKERS = os.cpu_count()
 
-def create_dataloaders(train_dir: str, 
-                       test_dir: str, 
-                       transform: transforms.Compose, 
-                       batch_size: int, 
+def create_dataloaders(train_dir: str,
+                       test_dir: str,
+                       train_transform: transforms.Compose,
+                       test_transform: transforms.Compose,
+                       batch_size: int,
                        num_workers: int=NUM_WORKERS):
   """Creates training and testing DataLoaders.
 
@@ -22,7 +23,8 @@ def create_dataloaders(train_dir: str,
   Args:
     train_dir: Path to training directory.
     test_dir: Path to testing directory.
-    transform: torchvision transforms to perform on training and testing data.
+    train_transform: torchvision transforms to perform on training data.
+    test_transform: torchvision transforms to perform on testing data.
     batch_size: Number of samples per batch in each of the DataLoaders.
     num_workers: An integer for number of workers per DataLoader.
 
@@ -33,13 +35,14 @@ def create_dataloaders(train_dir: str,
       train_dataloader, test_dataloader, class_names = \
         = create_dataloaders(train_dir=path/to/train_dir,
                              test_dir=path/to/test_dir,
-                             transform=some_transform,
+                             train_transform=train_transform,
+                             test_transform=test_transform,
                              batch_size=32,
                              num_workers=4)
   """
   # Use ImageFolder to create dataset(s)
-  train_data = datasets.ImageFolder(train_dir, transform=transform)
-  test_data = datasets.ImageFolder(test_dir, transform=transform)
+  train_data = datasets.ImageFolder(train_dir, transform=train_transform)
+  test_data = datasets.ImageFolder(test_dir, transform=test_transform)
 
   # Get class names
   class_names = train_data.classes
